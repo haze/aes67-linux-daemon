@@ -1,0 +1,96 @@
+{
+  "nodes": {
+    "cpp-httplib": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1668531434,
+        "narHash": "sha256-QUHDApOvfo6Dby6m6+led2WjoetEuNHUfg/IefPzdbA=",
+        "owner": "bondagit",
+        "repo": "cpp-httplib",
+        "rev": "07c6e58951931f8c74de8291ff35a3298fe481c4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bondagit",
+        "repo": "cpp-httplib",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1751274312,
+        "narHash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "ravenna-alsa-lkm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1765987336,
+        "narHash": "sha256-YgWNk2l6CmlESEn1c+L4EY+2QCrvK1v+Bfq5IgGVmQE=",
+        "owner": "bondagit",
+        "repo": "ravenna-alsa-lkm",
+        "rev": "d1051ec2e9d72d9a4372df11af45e26e7d8717fc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bondagit",
+        "ref": "aes67-daemon",
+        "repo": "ravenna-alsa-lkm",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "cpp-httplib": "cpp-httplib",
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs",
+        "ravenna-alsa-lkm": "ravenna-alsa-lkm"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

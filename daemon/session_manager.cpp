@@ -686,7 +686,8 @@ std::string SessionManager::get_source_sdp_(uint32_t id,
      << " " << info.stream.m_cCodec << "/" << sample_rate << "/"
      << static_cast<unsigned>(info.stream.m_byNbOfChannels) << "\n"
      << "a=sync-time:0\n"
-     << "a=framecount:" << info.stream.m_ui32MaxSamplesPerPacket << "\n"
+     << "a=framecount:" << info.stream.m_ui32MaxSamplesPerPacket
+     << "-" << (info.stream.m_ui32MaxSamplesPerPacket * 4) << "\n"
      << "a=ptime:" << ptime << "\n"
      << "a=mediaclk:direct=0\n";
   ss << "a=ts-refclk:ptp=IEEE1588-2008:";
@@ -696,7 +697,7 @@ std::string SessionManager::get_source_sdp_(uint32_t id,
     ss << ptp_status_.gmid << ":" << static_cast<unsigned>(ptp_config_.domain)
        << "\n";
   }
-  ss << "a=recvonly\n";
+  ss << "a=sendonly\n";
 
   return ss.str();
 }
