@@ -151,6 +151,12 @@ bool RtspSession::process_request() {
     BOOST_LOG_TRIVIAL(error)
         << "rtsp_server:: no RTSP specified from " << socket_.remote_endpoint();
     send_error(400, "Bad Request");
+  } else if (fields[0] == "OPTIONS") {
+    std::stringstream ss;
+    ss << "RTSP/1.0 200 OK\r\n"
+       << "CSeq: " << cseq_ << "\r\n"
+       << "Public: DESCRIBE, OPTIONS\r\n\r\n";
+    send_response(ss.str());
   } else if (fields[0] != "DESCRIBE") {
     send_error(405, "Method Not Allowed");
   } else {
