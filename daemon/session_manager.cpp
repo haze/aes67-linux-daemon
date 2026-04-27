@@ -1295,7 +1295,7 @@ bool SessionManager::worker() {
           ptp_status_.gmid = ptp_clock_id;
           ptp_changed_gmid = true;
         }
-        ptp_status_.jitter = ptp_status.i32ClockJitter;
+        ptp_status_.jitter = ptp_status.i32Jitter;
         std::string new_ptp_status;
         switch (ptp_status.nPTPLockStatus) {
           case PTPLS_UNLOCKED:
