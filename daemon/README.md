@@ -199,8 +199,10 @@ Example
       "syslog_proto": "none",
       "syslog_server": "255.255.255.254:1234",
       "rtp_mcast_base": "239.2.0.1",
+      "rtp_mcast_base_sec": "239.2.0.1",
       "status_file": "./status.json",
       "rtp_port": "5004",
+      "rtp_port_sec": "5006",
       "ptp_domain": 0,
       "ptp_dscp": 46,
       "playout_delay": 0,
@@ -220,6 +222,11 @@ Example
       "streamer_files_num": 6,
       "streamer_file_duration": 1,
       "streamer_player_buffer_files_num": 1
+      "nmos_enabled": false,
+      "nmos_registry_address": "127.0.0.1",
+      "nmos_registry_port": 8010,
+      "nmos_node_port": 3212,
+      "nmos_label": "AES67 Daemon"
     }
 
 where:
@@ -257,8 +264,16 @@ where:
 > The specific multicast RTP address is the base address plus the source id number.    
 > For example if the base address is 239.2.0.1 and source id is 1 the RTP source address used is 239.2.0.2.
 
+> **rtp\_mcast\_base\_sec**
+> JSON string specifying the default base RTP IPv4 multicast address used for the secondary interface by a source.
+> The specific multicast RTP address is the base address plus the source id number.
+> For example if the secondary base address is 239.2.1.1 and source id is 1 the RTP source address used is 239.2.1.2.
+
 > **rtp\_port**
 > JSON number specifying the RTP port used by the sources.
+
+> **rtp\_port\_sec**
+> JSON number specifying the RTP port used for the secondary interface by the sources.
 
 > **ptp\_domain**
 > JSON number specifying the PTP clock domain of the master clock the driver will attempt to synchronize to.
@@ -332,6 +347,22 @@ where:
 
 > **streamer\_player\_buffer\_files\_num**
 > JSON number specifying the player buffer in number of files.
+
+> **nmos\_enabled**
+> JSON boolean specifying the NMOS support is enabled or disable.
+
+> **nmos\_registry\_address**
+> JSON string specifying the address of the NMOS registry to connect to.
+
+> **nmos\_registry\_port**
+> JSON number specifying the port of the NMOS registry to connect to.
+
+> **nmos\_node\_port**
+> JSON number specifying the port of the local NMOS node.
+> The NMOS node binds to any network interface on this port.
+
+> **nmos\_label**
+> JSON string specifying the NMOS label.
 
 
 ### JSON PTP Config<a name="ptp-config"></a> ###

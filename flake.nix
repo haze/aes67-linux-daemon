@@ -5,12 +5,17 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     flake-utils.url = "github:numtide/flake-utils";
 
+    # Use the local git submodules rather than the remote github branches.
+    # This is what lets the NixOS system build the kernel module (and the
+    # daemon/webui against the same ravenna source) from this checkout, so
+    # local fixes (e.g. the strncpy() -> strscpy() kernel fix) are picked up
+    # directly without any patch overlay.
     cpp-httplib = {
-      url = "github:bondagit/cpp-httplib";
+      url = "path:./3rdparty/cpp-httplib";
       flake = false;
     };
     ravenna-alsa-lkm = {
-      url = "github:bondagit/ravenna-alsa-lkm/aes67-daemon";
+      url = "path:./3rdparty/ravenna-alsa-lkm";
       flake = false;
     };
   };

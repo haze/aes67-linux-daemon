@@ -52,8 +52,12 @@ class Config {
   uint32_t get_max_tic_frame_size() const { return max_tic_frame_size_; };
   uint32_t get_sample_rate() const { return sample_rate_; };
   const std::string& get_rtp_mcast_base() const { return rtp_mcast_base_; };
+  const std::string& get_rtp_mcast_base_sec() const {
+    return rtp_mcast_base_sec_;
+  };
   const std::string& get_sap_mcast_addr() const { return sap_mcast_addr_; };
   uint16_t get_rtp_port() const { return rtp_port_; };
+  uint16_t get_rtp_port_sec() const { return rtp_port_sec_; };
   uint8_t get_ptp_domain() const { return ptp_domain_; };
   uint8_t get_ptp_dscp() const { return ptp_dscp_; };
   uint16_t get_sap_interval() const { return sap_interval_; };
@@ -69,6 +73,12 @@ class Config {
   const std::string& get_custom_node_id() const { return custom_node_id_; };
   std::string get_node_id() const;
   bool get_auto_sinks_update() const { return auto_sinks_update_; };
+
+  bool get_nmos_enabled() const { return nmos_enabled_; }
+  const std::string& get_nmos_registry_address() const { return nmos_registry_address_; }
+  uint16_t get_nmos_registry_port() const { return nmos_registry_port_; }
+  uint16_t get_nmos_node_port() const { return nmos_node_port_; }
+  const std::string& get_nmos_label() const { return nmos_label_; }
 
   /* attributes set during init */
   const std::array<uint8_t, 6>& get_mac_addr() const { return mac_addr_; };
@@ -121,12 +131,18 @@ class Config {
   void set_rtp_mcast_base(std::string_view rtp_mcast_base) {
     rtp_mcast_base_ = rtp_mcast_base;
   };
+  void set_rtp_mcast_base_sec(std::string_view rtp_mcast_base_sec) {
+    rtp_mcast_base_sec_ = rtp_mcast_base_sec;
+  };
+  void set_rtp_port(uint16_t rtp_port) { rtp_port_ = rtp_port; };
+  void set_rtp_port_sec(uint16_t rtp_port_sec) {
+    rtp_port_sec_ = rtp_port_sec;
+  };
+  void set_ptp_domain(uint8_t ptp_domain) { ptp_domain_ = ptp_domain; };
+  void set_ptp_dscp(uint8_t ptp_dscp) { ptp_dscp_ = ptp_dscp; };
   void set_sap_mcast_addr(std::string_view sap_mcast_addr) {
     sap_mcast_addr_ = sap_mcast_addr;
   };
-  void set_rtp_port(uint16_t rtp_port) { rtp_port_ = rtp_port; };
-  void set_ptp_domain(uint8_t ptp_domain) { ptp_domain_ = ptp_domain; };
-  void set_ptp_dscp(uint8_t ptp_dscp) { ptp_dscp_ = ptp_dscp; };
   void set_sap_interval(uint16_t sap_interval) {
     sap_interval_ = sap_interval;
   };
@@ -161,6 +177,12 @@ class Config {
   };
   void set_driver_restart(bool restart) { driver_restart_ = restart; }
 
+  void set_nmos_enabled(bool v) { nmos_enabled_ = v; }
+  void set_nmos_registry_address(std::string_view v) { nmos_registry_address_ = v; }
+  void set_nmos_registry_port(uint16_t v) { nmos_registry_port_ = v; }
+  void set_nmos_node_port(uint16_t v) { nmos_node_port_ = v; }
+  void set_nmos_label(std::string_view v) { nmos_label_ = v; }
+
   friend bool operator!=(const Config& lhs, const Config& rhs) {
     return lhs.get_http_addr_str() != rhs.get_http_addr_str() ||
            lhs.get_http_port() != rhs.get_http_port() ||
@@ -179,8 +201,10 @@ class Config {
            lhs.get_max_tic_frame_size() != rhs.get_max_tic_frame_size() ||
            lhs.get_sample_rate() != rhs.get_sample_rate() ||
            lhs.get_rtp_mcast_base() != rhs.get_rtp_mcast_base() ||
+           lhs.get_rtp_mcast_base_sec() != rhs.get_rtp_mcast_base_sec() ||
            lhs.get_sap_mcast_addr() != rhs.get_sap_mcast_addr() ||
            lhs.get_rtp_port() != rhs.get_rtp_port() ||
+           lhs.get_rtp_port_sec() != rhs.get_rtp_port_sec() ||
            lhs.get_ptp_domain() != rhs.get_ptp_domain() ||
            lhs.get_ptp_dscp() != rhs.get_ptp_dscp() ||
            lhs.get_sap_interval() != rhs.get_sap_interval() ||
@@ -190,7 +214,12 @@ class Config {
            lhs.get_interface_name() != rhs.get_interface_name() ||
            lhs.get_mdns_enabled() != rhs.get_mdns_enabled() ||
            lhs.get_auto_sinks_update() != rhs.get_auto_sinks_update() ||
-           lhs.get_custom_node_id() != rhs.get_custom_node_id();
+           lhs.get_custom_node_id() != rhs.get_custom_node_id() ||
+           lhs.get_nmos_enabled() != rhs.get_nmos_enabled() ||
+           lhs.get_nmos_registry_address() != rhs.get_nmos_registry_address() ||
+           lhs.get_nmos_registry_port() != rhs.get_nmos_registry_port() ||
+           lhs.get_nmos_node_port() != rhs.get_nmos_node_port() ||
+           lhs.get_nmos_label() != rhs.get_nmos_label();
   };
   friend bool operator==(const Config& lhs, const Config& rhs) {
     return !(lhs != rhs);
@@ -213,8 +242,10 @@ class Config {
   uint32_t max_tic_frame_size_{1024};
   uint32_t sample_rate_{48000};
   std::string rtp_mcast_base_{"239.1.0.1"};
+  std::string rtp_mcast_base_sec_{"239.1.0.1"};
   std::string sap_mcast_addr_{"224.2.127.254"};
   uint16_t rtp_port_{5004};
+  uint16_t rtp_port_sec_{5004};
   uint8_t ptp_domain_{0};
   uint8_t ptp_dscp_{46};
   uint16_t sap_interval_{300};
@@ -228,6 +259,12 @@ class Config {
   std::string custom_node_id_;
   std::string node_id_;
   bool auto_sinks_update_{true};
+
+  bool nmos_enabled_{false};
+  std::string nmos_registry_address_;
+  uint16_t nmos_registry_port_{8010};
+  uint16_t nmos_node_port_{3212};
+  std::string nmos_label_{"AES67 Daemon"};
 
   /* set during init */
   std::array<uint8_t, 6> mac_addr_{0, 0, 0, 0, 0, 0};

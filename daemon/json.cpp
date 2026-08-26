@@ -89,7 +89,10 @@ std::string config_to_json(const Config& config) {
      << ",\n  \"sample_rate\": " << config.get_sample_rate()
      << ",\n  \"rtp_mcast_base\": \""
      << escape_json(config.get_rtp_mcast_base()) << "\""
+     << ",\n  \"rtp_mcast_base_sec\": \""
+     << escape_json(config.get_rtp_mcast_base_sec()) << "\""
      << ",\n  \"rtp_port\": " << config.get_rtp_port()
+     << ",\n  \"rtp_port_sec\": " << config.get_rtp_port_sec()
      << ",\n  \"ptp_domain\": " << unsigned(config.get_ptp_domain())
      << ",\n  \"ptp_dscp\": " << unsigned(config.get_ptp_dscp())
      << ",\n  \"sap_mcast_addr\": \""
@@ -120,7 +123,14 @@ std::string config_to_json(const Config& config) {
      << ",\n  \"streamer_enabled\": " << std::boolalpha
      << config.get_streamer_enabled()
      << ",\n  \"auto_sinks_update\": " << std::boolalpha
-     << config.get_auto_sinks_update() << "\n}\n";
+     << config.get_auto_sinks_update()
+     << ",\n  \"nmos_enabled\": " << std::boolalpha << config.get_nmos_enabled()
+     << ",\n  \"nmos_registry_address\": \""
+     << escape_json(config.get_nmos_registry_address()) << "\""
+     << ",\n  \"nmos_registry_port\": " << config.get_nmos_registry_port()
+     << ",\n  \"nmos_node_port\": " << config.get_nmos_node_port()
+     << ",\n  \"nmos_label\": \"" << escape_json(config.get_nmos_label()) << "\""
+     << "\n}\n";
   return ss.str();
 }
 
@@ -339,8 +349,15 @@ Config json_to_config_(std::istream& js, Config& config) {
       } else if (key == "rtp_mcast_base") {
         config.set_rtp_mcast_base(
             remove_undesired_chars(val.get_value<std::string>()));
+      } else if (key == "rtp_mcast_base_sec") {
+        config.set_rtp_mcast_base_sec(
+            remove_undesired_chars(val.get_value<std::string>()));
       } else if (key == "rtp_port") {
         config.set_rtp_port(val.get_value<uint16_t>());
+      } else if (key == "rtp_port") {
+        config.set_rtp_port(val.get_value<uint16_t>());
+      } else if (key == "rtp_port_sec") {
+        config.set_rtp_port_sec(val.get_value<uint16_t>());
       } else if (key == "ptp_domain") {
         config.set_ptp_domain(val.get_value<uint8_t>());
       } else if (key == "ptp_dscp") {
@@ -369,6 +386,18 @@ Config json_to_config_(std::istream& js, Config& config) {
             remove_undesired_chars(val.get_value<std::string>()));
       } else if (key == "auto_sinks_update") {
         config.set_auto_sinks_update(val.get_value<bool>());
+      } else if (key == "nmos_enabled") {
+        config.set_nmos_enabled(val.get_value<bool>());
+      } else if (key == "nmos_registry_address") {
+        config.set_nmos_registry_address(
+            remove_undesired_chars(val.get_value<std::string>()));
+      } else if (key == "nmos_registry_port") {
+        config.set_nmos_registry_port(val.get_value<uint16_t>());
+      } else if (key == "nmos_node_port") {
+        config.set_nmos_node_port(val.get_value<uint16_t>());
+      } else if (key == "nmos_label") {
+        config.set_nmos_label(
+            remove_undesired_chars(val.get_value<std::string>()));
       } else if (key == "ip_addr") {
         config.set_ip_addr_str(val.get_value<std::string>());
       } else if (key == "mac_addr" || key == "node_id") {

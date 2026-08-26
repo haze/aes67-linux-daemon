@@ -10,8 +10,7 @@ buildNpmPackage {
 
   inherit src;
   sourceRoot = "source/webui";
-
-  npmDepsHash = "sha256-cLioC/g5ankQf8U675d/wwXrEhsA4O/DvW15orelpkQ=";
+  npmDepsHash = "sha256-uTO5UyEIbGgItPL1lOM4eZb1MviXri4tfNSVyorfyCg=";
 
   nativeBuildInputs = [ nodejs ];
 

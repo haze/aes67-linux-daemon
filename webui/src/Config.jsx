@@ -48,6 +48,10 @@ class Config extends Component {
       rtpMcastBaseErr: false,
       rtpPort: '',
       rtpPortErr: false,
+      rtpMcastBaseSec: '',
+      rtpMcastBaseSecErr: false,
+      rtpPortSec: '',
+      rtpPortSecErr: false,      
       ptpDomain: '',
       ptpDscp: '',
       sapInterval: '',
@@ -67,12 +71,19 @@ class Config extends Component {
       interfaceName: '',
       customNodeId: '',
       customNodeIdErr: false,
+      nodeId: '',
       macAddr: '',
       ipAddr: '',
       errors: 0,
       isConfigLoading: false,
       isVersionLoading: false,
-      autoSinksUpdate: false
+      autoSinksUpdate: false,
+      nmosRegistryAddress: '',
+      nmosRegistryAddressErr: false,
+      nmosRegistryPort: '',
+      nmosRegistryPortErr: false,
+      nmosNodePort: '',
+      nmosNodePortErr: false,
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.inputIsValid = this.inputIsValid.bind(this);
@@ -104,7 +115,9 @@ class Config extends Component {
             maxTicFrameSize: data.max_tic_frame_size,
             sampleRate: data.sample_rate,
             rtpMcastBase: data.rtp_mcast_base,
+            rtpMcastBaseSec: data.rtp_mcast_base_sec,
             rtpPort: data.rtp_port,
+            rtpPortSec: data.rtp_port_sec,
             ptpDomain: data.ptp_domain,
             ptpDscp: data.ptp_dscp,
             sapMcastAddr: data.sap_mcast_addr,
@@ -124,6 +137,10 @@ class Config extends Component {
             ipAddr: data.ip_addr,
             nodeId: data.node_id,
             autoSinksUpdate: data.auto_sinks_update,
+            nmosEnabled: data.nmos_enabled,
+            nmosRegistryAddress: data.nmos_registry_address,
+            nmosRegistryPort: data.nmos_registry_port,
+            nmosNodePort: data.nmos_node_port,
             isConfigLoading: false
 	  }))
       .catch(err => this.setState({isConfigLoading: false}));
@@ -140,8 +157,10 @@ class Config extends Component {
     return !this.state.playoutDelayErr &&
       !this.state.maxTicFrameSizeErr &&
       !this.state.rtpMcastBaseErr &&
+      !this.state.rtpMcastBaseSecErr &&
       !this.state.sapMcastAddrErr &&
       !this.state.rtpPortErr &&
+      !this.state.rtpPortSecErr &&
       !this.state.rtspPortErr &&
       !this.state.sapIntervalErr &&
       !this.state.streamerChIntervalErr &&
@@ -160,7 +179,9 @@ class Config extends Component {
       this.state.syslogProto,
       this.state.syslogServer,
       this.state.rtpMcastBase,
+      this.state.rtpMcastBaseSec,
       this.state.rtpPort,
+      this.state.rtpPortSec,
       this.state.rtspPort,
       this.state.playoutDelay,
       this.state.ticFrameSizeAt1fs,
@@ -175,7 +196,11 @@ class Config extends Component {
       this.state.streamerChannels,
       this.state.streamerFiles,
       this.state.streamerFileDuration,
-      this.state.streamerPlayerBufferFiles)
+      this.state.streamerPlayerBufferFiles,
+      this.state.nmosEnabled,
+      this.state.nmosRegistryAddress,
+      this.state.nmosRegistryPort,
+      this.state.nmosNodePort)
     .then(response => toast.success('Applying new configuration ...'));
   }
 
@@ -277,9 +302,17 @@ class Config extends Component {
             <th align="left"> <input type="text" minLength="7" maxLength="15" size="15" pattern="^2(?:2[4-9]|3\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d?|0)){3}$" value={this.state.rtpMcastBase} onChange={e => this.setState({rtpMcastBase: e.target.value, rtpMcastBaseErr: !e.currentTarget.checkValidity()})} required/> </th>
           </tr>
           <tr>
+            <th align="left"> <label>Secondary RTP address</label> </th>
+            <th align="left"> <input type="text" minLength="7" maxLength="15" size="15" pattern="^2(?:2[4-9]|3\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d?|0)){3}$" value={this.state.rtpMcastBaseSec} onChange={e => this.setState({rtpMcastBaseSec: e.target.value, rtpMcastBaseSecErr: !e.currentTarget.checkValidity()})} required/> </th>
+          </tr>          
+          <tr>
             <th align="left"> <label>RTP port</label> </th>
             <th align="left"> <input type='number' min='1024' max='65536'  className='input-number' value={this.state.rtpPort} onChange={e => this.setState({rtpPort: e.target.value, rtpPortErr: !e.currentTarget.checkValidity()})} required/> </th>
           </tr>
+          <tr>
+            <th align="left"> <label>Secondary RTP port</label> </th>
+            <th align="left"> <input type='number' min='1024' max='65536'  className='input-number' value={this.state.rtpPortSec} onChange ={e => this.setState({rtpPortSec: e.target.value, rtpPortSecErr: !e.currentTarget.checkValidity()})} required/> </th>
+          </tr>          
           <tr>
             <th align="left"> <label>SAP multicast address</label> </th>
             <th align="left"> <input type="text" minLength="7" maxLength="15" size="15" pattern="^2(?:2[4-9]|3\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d?|0)){3}$" value={this.state.sapMcastAddr} onChange={e => this.setState({sapMcastAddr: e.target.value, sapMcastAddrErr: !e.currentTarget.checkValidity()})} required/> </th>
@@ -290,11 +323,11 @@ class Config extends Component {
           </tr>
           <tr height="35">
             <th align="left"> <label>mDNS enabled</label> </th>
-            <th align="left"> <input type="checkbox" onChange={e => this.setState({mdnsEnabled: e.target.checked})} checked={this.state.mdnsEnabled ? true : undefined}/> </th>
+            <th align="left"> <input type="checkbox" onChange={e => this.setState({mdnsEnabled: e.target.checked})} checked={this.state.mdnsEnabled ? true : false}/> </th>
           </tr>
           <tr height="35">
             <th align="left"> <label>Auto Sinks update</label> </th>
-            <th align="left"> <input type="checkbox" onChange={e => this.setState({autoSinksUpdate: e.target.checked})} checked={this.state.autoSinksUpdate ? true : undefined}/> </th>
+            <th align="left"> <input type="checkbox" onChange={e => this.setState({autoSinksUpdate: e.target.checked})} checked={this.state.autoSinksUpdate ? true : false}/> </th>
           </tr>
           <tr>
             <th align="left"> <label>Network Interface</label> </th>
@@ -310,6 +343,25 @@ class Config extends Component {
           </tr>
         </tbody></table>
         <br/>
+	{this.state.isConfigLoading ? <Loader/> : <h3>NMOS Config</h3>}
+        <table><tbody>
+          <tr height="35">
+            <th align="left"> <label>NMOS enabled</label> </th>
+            <th align="left"> <input type="checkbox" onChange={e => this.setState({nmosEnabled: e.target.checked})} checked={this.state.nmosEnabled ? true : false}/> </th>
+          </tr>
+          <tr>
+            <th align="left"> <label>NMOS Registry Address</label> </th>
+            <th align="left"> <input value={this.state.nmosRegistryAddress} onChange={e => this.setState({nmosRegistryAddress: e.target.value, nmosRegistryAddressErr: !e.currentTarget.checkValidity()})} /> </th>
+          </tr>
+          <tr>
+            <th align="left"> <label>NMOS Registry Port</label> </th>
+            <th align="left"> <input type='number' min='0' max='65535' value={this.state.nmosRegistryPort} onChange={e => this.setState({nmosRegistryPort: e.target.value, nmosRegistryPortErr: !e.currentTarget.checkValidity()})} /> </th>
+          </tr>
+          <tr>
+            <th align="left"> <label>NMOS Node Port</label> </th>
+            <th align="left"> <input type='number' min='0' max='65535' value={this.state.nmosNodePort} onChange={e => this.setState({nmosNodePort: e.target.value, nmosNodePortErr: !e.currentTarget.checkValidity()})} /> </th>
+          </tr>
+        </tbody></table>
 	{this.state.isConfigLoading ? <Loader/> : <h3>Logging Config</h3>}
         <table><tbody>
           <tr>
@@ -338,7 +390,7 @@ class Config extends Component {
               </select>
             </th>
           </tr>
-        </tbody></table>
+        </tbody></table>        
         <br/>
         <table><tbody>
           <tr>
